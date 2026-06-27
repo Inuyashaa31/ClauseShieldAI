@@ -18,7 +18,7 @@ export default function WorkspacePage() {
     const [isLoading, setIsLoading] = useState(false);
     const [showPaywall, setShowPaywall] = useState(false);
     const [analysisResult, setAnalysisResult] = useState(null);
-    const [activeTab, setActiveTab] = useState("input"); 
+    const [activeTab, setActiveTab] = useState("input");
     const [customKey, setCustomKey] = useState("");
     const [copiedStatus, setCopiedStatus] = useState({});
     const [errorMessage, setErrorMessage] = useState("");
@@ -32,7 +32,7 @@ export default function WorkspacePage() {
         const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUserSession(user);
-                
+
                 // Establish an active socket connection to listen for document modifications
                 const userDocRef = doc(db, "users", user.uid);
                 const unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
@@ -61,7 +61,7 @@ export default function WorkspacePage() {
         try {
             if (!userSession) return;
             const userDocRef = doc(db, "users", userSession.uid);
-            
+
             // Push calculation updates into Firestore cloud records
             await updateDoc(userDocRef, {
                 credits: credits + addedCredits
@@ -103,7 +103,7 @@ export default function WorkspacePage() {
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
+
         try {
             document.execCommand('copy');
             setCopiedStatus(prev => ({ ...prev, [id]: true }));
@@ -121,7 +121,7 @@ export default function WorkspacePage() {
         setAnalysisResult(null);
         setErrorMessage("");
         setContractText("");
-        setInputKey(prev => prev + 1); 
+        setInputKey(prev => prev + 1);
     };
 
     const runContractScan = async () => {
@@ -198,10 +198,19 @@ You must analyze the contract and return ONLY a single stringified valid JSON ob
 
             let parsedData;
             try {
-                parsedData = JSON.parse(textResponse.trim());
+                // 1. Convert the response to a safe string and strip away any messy markdown formatting tags
+                let cleanText = String(textResponse || "")
+                    .replace(/```json/g, "")
+                    .replace(/```/g, "")
+                    .trim();
+
+                // 2. Safely convert the cleaned string into a readable layout object
+                parsedData = JSON.parse(cleanText);
             } catch (jsonErr) {
-                const cleanJsonText = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
-                parsedData = JSON.parse(cleanJsonText);
+                console.error("Scrub parsing sequence aborted:", jsonErr);
+                setErrorMessage("The engine returned an irregular format. Please re-run the scan.");
+                setIsLoading(false);
+                return; // Safely exits the code instead of throwing a red error screen
             }
 
             // 3. Atomically Decrement Balance Value Directly Inside Cloud Firestore Instance Standard Syntax
