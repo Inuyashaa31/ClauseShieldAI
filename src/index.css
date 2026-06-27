@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+/* @import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource-variable/space-grotesk";
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *)); */
+
+/*
+ * ClauseShield AI — "Fluid Kinetic" design system.
+ * Dark workspace with moving abstract gradient orbs and scroll reveals.
+ * All colors live here as tokens. Never hardcode colors in components.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-danger: var(--brand-danger);
+  --color-brand-warning: var(--brand-warning);
+  --color-brand-success: var(--brand-success);
+  --color-surface: var(--surface);
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "Inter", sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Fluid Kinetic palette */
+  --brand-bg: oklch(0.13 0 0);
+  --brand-primary: oklch(0.71 0.143 276);
+  --brand-accent: oklch(0.74 0.16 311);
+  --brand-danger: oklch(0.64 0.21 25);
+  --brand-warning: oklch(0.8 0.16 84);
+  --brand-success: oklch(0.74 0.16 152);
+  --surface: oklch(0.16 0 0);
+
+  /* Mapped shadcn tokens (dark workspace defaults) */
+  --background: var(--brand-bg);
+  --foreground: oklch(0.98 0 0);
+  --card: var(--surface);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: var(--surface);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: var(--brand-primary);
+  --primary-foreground: oklch(0.13 0 0);
+  --secondary: oklch(0.24 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.24 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: var(--brand-accent);
+  --accent-foreground: oklch(0.13 0 0);
+  --destructive: var(--brand-danger);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(1 0 0 / 8%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: var(--brand-primary);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+/* ---------- Moving abstract background orbs ---------- */
+@keyframes fluidMove {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate(30px, -50px) rotate(120deg) scale(1.1); }
+  66% { transform: translate(-20px, 20px) rotate(240deg) scale(0.9); }
+  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
+@utility animate-fluid {
+  animation: fluidMove 25s infinite alternate ease-in-out;
+}
+
+@utility animate-fluid-reverse {
+  animation: fluidMove 35s infinite alternate-reverse ease-in-out;
+}
+
+/* ---------- Glass panels ---------- */
+@utility glass-panel {
+  background: oklch(1 0 0 / 3%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid oklch(1 0 0 / 8%);
+}
+
+/* ---------- Scroll reveal ---------- */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fluid,
+  .animate-fluid-reverse {
+    animation: none;
+  }
+}
+
+/* --- Custom Scrollbar Styling Utility --- */
+
+/* 1. Target WebKit browsers (Chrome, Safari, Edge, Opera) */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;               /* Width of the vertical scrollbar */
+  height: 6px;              /* Height of a horizontal scrollbar */
+}
+
+/* 2. Style the background path/track of the scrollbar */
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02); /* Near invisible dark track */
+  border-radius: 9999px;
+}
+
+/* 3. Style the moving draggable handle */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15); /* Sleek translucent gray handle */
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+/* 4. Subtle hover highlight matching your aurora theme tints */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.4); /* Glow on hover (pink tint) */
+}
+
+/* 5. Fallback compatibility styling for Firefox */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) rgba(0, 0, 0, 0.2);
+}
