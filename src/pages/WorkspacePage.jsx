@@ -10,7 +10,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Header from '../components/Header';
 import ContractInput from '../components/modelpage/ContractInput';
 import ReportDashboard from '../components/modelpage/ReportDashboard';
-//import PaywallModal from '../components/PaywallModal';
+//import PaywallModal from '../components/PaywallModal'; // Uncommented and active
 
 export default function WorkspacePage() {
     const [contractText, setContractText] = useState("");
@@ -182,7 +182,7 @@ You must analyze the contract and return ONLY a single stringified valid JSON ob
                 parsedData = JSON.parse(cleanJsonText);
             }
 
-            // 3. Atomically Decrement Balance Value Directly Inside Cloud Firestore Instance
+            // 3. Atomically Decrement Balance Value Directly Inside Cloud Firestore Instance Standard Syntax
             if (userSession) {
                 const userDocRef = doc(db, "users", userSession.uid);
                 await updateDoc(userDocRef, {
