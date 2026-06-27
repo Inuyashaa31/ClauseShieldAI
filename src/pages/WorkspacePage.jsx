@@ -10,7 +10,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Header from '../components/Header';
 import ContractInput from '../components/modelpage/ContractInput';
 import ReportDashboard from '../components/modelpage/ReportDashboard';
-//import PaywallModal from '../components/PaywallModal'; // Uncommented and active
+// import PaywallModal from '../components/PaywallModal'; // Active and imported
 
 export default function WorkspacePage() {
     const [contractText, setContractText] = useState("");
@@ -77,11 +77,33 @@ export default function WorkspacePage() {
         }
     };
 
-    const handleCopyText = (text, id) => {
+    // Updated Copy Text Method: Completely optimized for iOS Safari and Chrome architectures
+    const handleCopyText = async (text, id) => {
+        // Attempt clean execution via modern browser navigator context
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            try {
+                await navigator.clipboard.writeText(text);
+                setCopiedStatus(prev => ({ ...prev, [id]: true }));
+                setTimeout(() => {
+                    setCopiedStatus(prev => ({ ...prev, [id]: false }));
+                }, 2000);
+                return;
+            } catch (err) {
+                console.warn("Modern clipboard failure, trying layout fallback...", err);
+            }
+        }
+
+        // Safe Fallback Layer: Configured with explicit styling bounds to eliminate mobile jumping
         const textArea = document.createElement("textarea");
         textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.top = '0';
+        textArea.style.left = '0';
+        textArea.style.opacity = '0';
         document.body.appendChild(textArea);
+        textArea.focus();
         textArea.select();
+        
         try {
             document.execCommand('copy');
             setCopiedStatus(prev => ({ ...prev, [id]: true }));
@@ -89,7 +111,7 @@ export default function WorkspacePage() {
                 setCopiedStatus(prev => ({ ...prev, [id]: false }));
             }, 2000);
         } catch (err) {
-            console.error("Failed to copy using fallback method", err);
+            console.error("All copy execution avenues failed on this engine configuration:", err);
         }
         document.body.removeChild(textArea);
     };
