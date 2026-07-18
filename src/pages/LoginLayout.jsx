@@ -5,10 +5,10 @@ import CursorBlob from '../components/CursorBlob';
 
 function LoginLayout() {
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#07080a] p-4 sm:p-6 lg:p-8">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#07080a] p-4 sm:p-6 lg:p-8">
       {/* Background grids matching standard workspace theme */}
-      <div 
-        className="pointer-events-none fixed inset-0 opacity-[0.03]" 
+      <div
+        className="pointer-events-none fixed inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)`,
           backgroundSize: '50px 50px'
@@ -27,9 +27,21 @@ function LoginLayout() {
           <LoginWelcomePanel />
         </div>
       </div>
-      <CursorBlob/>
+
+      {/* Mobile-Only Signup Navigation Prompt */}
+      <div className="mt-5 text-[11px] text-gray-500 block text-center md:hidden">
+        Don't have an account?{' '}
+        <button
+          onClick={() => { window.location.href = '/signup'; }}
+          className="font-semibold text-cyan-400 hover:underline bg-transparent border-none p-0 cursor-pointer align-baseline"
+        >
+          Sign up here
+        </button>
+      </div>
+
+      <CursorBlob />
     </div>
   );
 }
 
-export default LoginLayout
+export default LoginLayout;
