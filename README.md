@@ -2,6 +2,8 @@
 
 ClauseShield AI is a demonstration full-stack web application designed for freelancers, independent consultants, and small agencies to instantly scan business contracts for unfair terms. Leveraging a schema-constrained LLM pipeline and an automated credit transaction layout, it isolates hidden liability risks, auto-renewals, and non-compete bounds before signing.
 
+Preview: https://clause-shield-ai.vercel.app/
+
 ---
 
 ## 🚀 Core Architectural Pipeline
