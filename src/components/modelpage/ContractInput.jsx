@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Lock, AlertTriangle, Sparkles, RefreshCw, FileText, CheckCircle } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
 
-// Configure the PDF.js worker to pull from a stable CDN so it runs seamlessly client-side in Vite
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
+// Import exclusively from the legacy bundle path to maintain bulletproof compatibility across mobile/iOS environments
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.min.mjs';
+
+// Configure the legacy worker companion variant to prevent modern function environment mismatch errors
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
 
 export default function ContractInput({
   contractText,
