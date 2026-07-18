@@ -2,12 +2,8 @@ import React, { useState, useRef } from 'react';
 import { Upload, Lock, AlertTriangle, Sparkles, RefreshCw, FileText, CheckCircle } from 'lucide-react';
 
 // 1. Import exclusively from the legacy bundle path
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.min.mjs';
-
-// 2. Resolve and wire up the worker locally from your node_modules via Vite/Webpack
-import pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
-
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+import { pdfjs } from 'react-pdf';
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function ContractInput({
   contractText,
