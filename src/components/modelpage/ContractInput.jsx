@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Upload, Lock, AlertTriangle, Sparkles, RefreshCw, FileText, CheckCircle } from 'lucide-react';
 
-// Import exclusively from the legacy bundle path to maintain bulletproof compatibility across mobile/iOS environments
+// 1. Import exclusively from the legacy bundle path
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.min.mjs';
 
-// Configure the legacy worker companion variant to prevent modern function environment mismatch errors
-pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
+// 2. Resolve and wire up the worker locally from your node_modules via Vite/Webpack
+import pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export default function ContractInput({
   contractText,
@@ -120,7 +122,7 @@ export default function ContractInput({
             <FileText className="h-5 w-5 text-indigo-400" />
             2. Extracted Contract Content
           </h2>
-          <span className="text-xs text-zinc-500 font-mono">{contractText.length} characters</span>
+          <span className="text-xs text-zinc-500 font-mono">{contractText ? contractText.length : 0} characters</span>
         </div>
         
         <p className="text-xs text-zinc-400 mb-4">
@@ -162,7 +164,7 @@ export default function ContractInput({
 
         <button
           onClick={onScan}
-          disabled={isLoading || pdfLoading || !contractText.trim()}
+          disabled={isLoading || pdfLoading || !contractText || !contractText.trim()}
           className="mt-4 w-full bg-gradient-to-r from-indigo-500 via-indigo-600 to-purple-600 hover:from-indigo-600 hover:to-purple-700 disabled:from-zinc-800 disabled:to-zinc-800 disabled:text-zinc-500 text-white font-bold py-3.5 px-6 rounded-xl text-sm transition duration-300 shadow-lg shadow-indigo-500/10 hover:shadow-indigo-500/25 flex items-center justify-center gap-2.5 cursor-pointer disabled:cursor-not-allowed group"
         >
           {isLoading ? (
